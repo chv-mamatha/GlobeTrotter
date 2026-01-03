@@ -143,27 +143,120 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
+// Get user profile
+app.get('/api/users/profile', authenticateToken, async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT id, email, username, first_name, last_name, phone, bio, preferred_currency, timezone, created_at FROM users WHERE id = $1',
+      [req.user.userId]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const user = result.rows[0];
+    res.json({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      phone: user.phone,
+      bio: user.bio,
+      preferredCurrency: user.preferred_currency,
+      timezone: user.timezone,
+      created_at: user.created_at
+    });
+  } catch (error) {
+    console.error('Get profile error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get all destinations for filtering
+app.get('/api/destinations', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT c.id, c.name as city_name, co.name as country_name, co.iso_code,
+             c.latitude, c.longitude, c.average_cost_per_day,
+             COUNT(DISTINCT td.trip_id) as trip_count
+      FROM cities c
+      JOIN countries co ON c.country_id = co.id
+      LEFT JOIN trip_destinations td ON c.id = td.city_id
+      GROUP BY c.id, c.name, co.name, co.iso_code, c.latitude, c.longitude, c.average_cost_per_day
+      ORDER BY trip_count DESC, c.name
+    `);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Get destinations error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get attractions for a city
+app.get('/api/destinations/:cityId/attractions', async (req, res) => {
+  try {
+    const { cityId } = req.params;
+    const result = await pool.query(
+      'SELECT * FROM attractions WHERE city_id = $1 AND is_active = true ORDER BY rating DESC',
+      [cityId]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Get attractions error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Search destinations
+app.get('/api/destinations/search', async (req, res) => {
+  try {
+    const { q, budget_min, budget_max } = req.query;
+    let query = `
+      SELECT c.id, c.name as city_name, co.name as country_name, co.iso_code,
+             c.latitude, c.longitude, c.average_cost_per_day
+      FROM cities c
+      JOIN countries co ON c.country_id = co.id
+      WHERE 1=1
+    `;
+    const params = [];
+    
+    if (q) {
+      params.push(`%${q}%`);
+      query += ` AND (c.name ILIKE $${params.length} OR co.name ILIKE $${params.length})`;
+    }
+    
+    if (budget_min) {
+      params.push(budget_min);
+      query += ` AND c.average_cost_per_day >= $${params.length}`;
+    }
+    
+    if (budget_max) {
+      params.push(budget_max);
+      query += ` AND c.average_cost_per_day <= $${params.length}`;
+    }
+    
+    query += ' ORDER BY c.name LIMIT 50';
+    
+    const result = await pool.query(query, params);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Search destinations error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Get user trips
 app.get('/api/trips', authenticateToken, async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT * FROM trip_details WHERE user_id = $1 ORDER BY created_at DESC',
+      'SELECT * FROM trips WHERE user_id = $1 ORDER BY created_at DESC',
       [req.user.userId]
     );
     res.json(result.rows);
   } catch (error) {
     console.error('Get trips error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Get popular destinations
-app.get('/api/destinations/popular', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM popular_destinations LIMIT 10');
-    res.json(result.rows);
-  } catch (error) {
-    console.error('Get destinations error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

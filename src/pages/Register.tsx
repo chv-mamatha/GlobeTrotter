@@ -13,6 +13,7 @@ export default function Register() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    username: "",
     email: "",
     password: "",
     location: "",
@@ -42,14 +43,50 @@ export default function Register() {
     e.preventDefault();
     setIsLoading(true);
     
-    setTimeout(() => {
-      toast({
-        title: "Account created!",
-        description: "Welcome to GlobeTrotter. Start planning your adventures!",
+    try {
+      const response = await fetch('http://localhost:5001/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          username: formData.username || formData.email.split('@')[0],
+          password: formData.password,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+        }),
       });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store token and user data
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        toast({
+          title: "Account created!",
+          description: `Welcome ${data.user.firstName}! Start planning your adventures!`,
+        });
+        
+        navigate("/dashboard");
+      } else {
+        toast({
+          title: "Registration Failed",
+          description: data.error || "Unable to create account",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Connection Error",
+        description: "Unable to connect to server. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-      navigate("/dashboard");
-    }, 1500);
+    }
   };
 
   const containerVariants: Variants = {
@@ -151,7 +188,7 @@ export default function Register() {
               <p className="text-sm text-muted-foreground">Add profile picture</p>
             </motion.div>
 
-            {/* Name fields - 2 columns */}
+            {/* Name and Username fields */}
             <motion.div
               variants={itemVariants}
               className="grid grid-cols-1 sm:grid-cols-2 gap-4"
@@ -185,6 +222,23 @@ export default function Register() {
                     required
                   />
                 </div>
+              </div>
+            </motion.div>
+
+            {/* Username */}
+            <motion.div variants={itemVariants} className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="username"
+                  name="username"
+                  placeholder="johndoe"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="pl-10 h-12 bg-muted/50"
+                  required
+                />
               </div>
             </motion.div>
 
