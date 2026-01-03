@@ -14,7 +14,6 @@ import { SearchBar } from "@/components/shared/SearchBar";
 import { DestinationCard } from "@/components/shared/DestinationCard";
 import { TripCard } from "@/components/shared/TripCard";
 import { StatCard } from "@/components/shared/StatCard";
-import { Footer } from "@/components/shared/Footer";
 import { Button } from "@/components/ui/button";
 
 import heroImage from "@/assets/hero-travel.jpg";
@@ -74,9 +73,8 @@ const recentTrips = [
 
 export default function Dashboard() {
   return (
-    <>
-      <Layout>
-        <div className="container mx-auto px-4 py-6 sm:py-8">
+    <Layout>
+      <div className="container mx-auto px-4 py-6 sm:py-8 min-h-[calc(100vh-8rem)]">
           {/* Hero Section */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
@@ -175,8 +173,6 @@ export default function Dashboard() {
             </div>
           </section>
         </div>
-      </Layout>
-      <Footer />
-    </>
+    </Layout>
   );
 }
