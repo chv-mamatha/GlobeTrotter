@@ -21,7 +21,7 @@ export function Layout({ children, showHeader = true }: LayoutProps) {
       </motion.main>
       
       <footer className="bg-[#8b5a2b] text-white text-center py-4">
-        <p>© 2024 GlobeTrotter. Empowering Personalized Travel Planning.</p>
+        <p>© 2026 GlobeTrotter. Empowering Personalized Travel Planning.</p>
       </footer>
     </div>
   );

@@ -9,7 +9,7 @@ export function Footer() {
     >
       <div className="container mx-auto px-4 text-center">
         <p className="text-sm">
-          © 2024 GlobeTrotter. Empowering Personalized Travel Planning.
+          © 2026 GlobeTrotter. Empowering Personalized Travel Planning.
         </p>
       </div>
     </motion.footer>

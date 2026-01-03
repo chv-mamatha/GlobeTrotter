@@ -21,6 +21,11 @@ import Community from "./pages/Community";
 import CalendarView from "./pages/CalendarView";
 import AdminPanel from "./pages/AdminPanel";
 import Settings from "./pages/Settings";
+import HelpCenter from "./pages/HelpCenter";
+import Contact from "./pages/Contact";
+import FAQ from "./pages/FAQ";
+import Newsletter from "./pages/Newsletter";
+import TravelBlog from "./pages/TravelBlog";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +42,7 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/trending" element={<TrendingSites />} />
+          <Route path="/trending-sites" element={<TrendingSites />} />
           <Route path="/plan-trip" element={<PlanTrip />} />
           <Route path="/itinerary/new" element={<BuildItinerary />} />
           <Route path="/itinerary/:id" element={<BuildItinerary />} />
@@ -48,6 +54,11 @@ const App = () => (
           <Route path="/calendar" element={<CalendarView />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/help-center" element={<HelpCenter />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/newsletter" element={<Newsletter />} />
+          <Route path="/travel-blog" element={<TravelBlog />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ChatBot />

@@ -179,33 +179,33 @@ export default function Landing() {
               <div>
                 <h4 className="font-semibold mb-3 font-display">Features</h4>
                 <ul className="space-y-2 text-yellow-100">
-                  <li>Trip Planning</li>
-                  <li>Budget Tracking</li>
-                  <li>Calendar View</li>
-                  <li>Community</li>
+                  <li><a href="/plan-trip" className="hover:text-white transition-colors cursor-pointer">Trip Planning</a></li>
+                  <li><a href="/dashboard" className="hover:text-white transition-colors cursor-pointer">Budget Tracking</a></li>
+                  <li><a href="/calendar" className="hover:text-white transition-colors cursor-pointer">Calendar View</a></li>
+                  <li><a href="/community" className="hover:text-white transition-colors cursor-pointer">Community</a></li>
                 </ul>
               </div>
               <div>
                 <h4 className="font-semibold mb-3 font-display">Support</h4>
                 <ul className="space-y-2 text-yellow-100">
-                  <li>Help Center</li>
-                  <li>Contact Us</li>
-                  <li>Travel Tips</li>
-                  <li>FAQ</li>
+                  <li><a href="/help-center" className="hover:text-white transition-colors cursor-pointer">Help Center</a></li>
+                  <li><a href="/contact" className="hover:text-white transition-colors cursor-pointer">Contact Us</a></li>
+                  <li><a href="/trending-sites" className="hover:text-white transition-colors cursor-pointer">Travel Tips</a></li>
+                  <li><a href="/faq" className="hover:text-white transition-colors cursor-pointer">FAQ</a></li>
                 </ul>
               </div>
               <div>
                 <h4 className="font-semibold mb-3 font-display">Connect</h4>
                 <ul className="space-y-2 text-yellow-100">
-                  <li>Newsletter</li>
-                  <li>Social Media</li>
-                  <li>Travel Blog</li>
-                  <li>Community</li>
+                  <li><a href="/newsletter" className="hover:text-white transition-colors cursor-pointer">Newsletter</a></li>
+                  <li><a href="#" className="hover:text-white transition-colors cursor-pointer">Social Media</a></li>
+                  <li><a href="/travel-blog" className="hover:text-white transition-colors cursor-pointer">Travel Blog</a></li>
+                  <li><a href="/community" className="hover:text-white transition-colors cursor-pointer">Community</a></li>
                 </ul>
               </div>
             </div>
             <div className="border-t border-yellow-700 mt-8 pt-8 text-center text-yellow-100">
-              <p>&copy; 2024 GlobeTrotter. Made with ❤️ for travelers.</p>
+              <p>&copy; 2026 GlobeTrotter. Made with ❤️ for travelers.</p>
             </div>
           </div>
         </footer>
