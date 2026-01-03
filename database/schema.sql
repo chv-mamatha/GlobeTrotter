@@ -5,7 +5,8 @@
 
 -- Enable UUID extension for better primary keys
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS "postgis"; -- For geospatial data
+-- PostGIS extension is optional for advanced geospatial features
+-- CREATE EXTENSION IF NOT EXISTS "postgis";
 
 -- =====================================================
 -- CORE USER MANAGEMENT

@@ -75,11 +75,11 @@ WITH user_ids AS (
 )
 INSERT INTO trips (user_id, title, description, start_date, end_date, total_budget, currency, status, visibility, cover_image_url)
 SELECT * FROM (VALUES
-    ((SELECT id FROM user_ids WHERE username = 'johndoe'), 'European Adventure 2024', 'Exploring the cultural capitals of Europe', '2024-06-15', '2024-06-30', 5000.00, 'USD', 'planned', 'public', 'https://example.com/europe-trip.jpg'),
-    ((SELECT id FROM user_ids WHERE username = 'janesmith'), 'Japan Discovery Tour', 'Traditional and modern Japan experience', '2024-04-10', '2024-04-20', 3500.00, 'USD', 'completed', 'public', 'https://example.com/japan-trip.jpg'),
-    ((SELECT id FROM user_ids WHERE username = 'alexchen'), 'Southeast Asia Backpacking', 'Budget-friendly adventure through SEA', '2024-07-01', '2024-07-21', 2000.00, 'USD', 'draft', 'private', 'https://example.com/sea-trip.jpg'),
-    ((SELECT id FROM user_ids WHERE username = 'priyapatel'), 'Australian Road Trip', 'Exploring the Australian coast', '2024-09-05', '2024-09-20', 4000.00, 'AUD', 'planned', 'friends', 'https://example.com/australia-trip.jpg'),
-    ((SELECT id FROM user_ids WHERE username = 'demo_user'), 'Demo Trip - World Tour', 'Sample trip for demonstration', '2024-12-01', '2024-12-15', 10000.00, 'USD', 'draft', 'public', 'https://example.com/world-trip.jpg')
+    ((SELECT id FROM user_ids WHERE username = 'johndoe'), 'European Adventure 2024', 'Exploring the cultural capitals of Europe', DATE '2024-06-15', DATE '2024-06-30', 5000.00, 'USD', 'planned'::trip_status, 'public'::trip_visibility, 'https://example.com/europe-trip.jpg'),
+    ((SELECT id FROM user_ids WHERE username = 'janesmith'), 'Japan Discovery Tour', 'Traditional and modern Japan experience', DATE '2024-04-10', DATE '2024-04-20', 3500.00, 'USD', 'completed'::trip_status, 'public'::trip_visibility, 'https://example.com/japan-trip.jpg'),
+    ((SELECT id FROM user_ids WHERE username = 'alexchen'), 'Southeast Asia Backpacking', 'Budget-friendly adventure through SEA', DATE '2024-07-01', DATE '2024-07-21', 2000.00, 'USD', 'draft'::trip_status, 'private'::trip_visibility, 'https://example.com/sea-trip.jpg'),
+    ((SELECT id FROM user_ids WHERE username = 'priyapatel'), 'Australian Road Trip', 'Exploring the Australian coast', DATE '2024-09-05', DATE '2024-09-20', 4000.00, 'AUD', 'planned'::trip_status, 'friends'::trip_visibility, 'https://example.com/australia-trip.jpg'),
+    ((SELECT id FROM user_ids WHERE username = 'demo_user'), 'Demo Trip - World Tour', 'Sample trip for demonstration', DATE '2024-12-01', DATE '2024-12-15', 10000.00, 'USD', 'draft'::trip_status, 'public'::trip_visibility, 'https://example.com/world-trip.jpg')
 ) AS v(user_id, title, description, start_date, end_date, total_budget, currency, status, visibility, cover_image_url);
 
 -- =====================================================
@@ -93,11 +93,11 @@ WITH trip_ids AS (
 )
 INSERT INTO trip_destinations (trip_id, city_id, arrival_date, departure_date, order_index, budget_allocated, notes)
 SELECT * FROM (VALUES
-    ((SELECT id FROM trip_ids WHERE title = 'European Adventure 2024'), (SELECT id FROM city_ids WHERE name = 'Paris'), '2024-06-15', '2024-06-20', 1, 1500.00, 'Visit major landmarks and museums'),
-    ((SELECT id FROM trip_ids WHERE title = 'European Adventure 2024'), (SELECT id FROM city_ids WHERE name = 'Berlin'), '2024-06-21', '2024-06-25', 2, 1200.00, 'Explore historical sites'),
-    ((SELECT id FROM trip_ids WHERE title = 'European Adventure 2024'), (SELECT id FROM city_ids WHERE name = 'London'), '2024-06-26', '2024-06-30', 3, 2000.00, 'Final stop - shopping and theater'),
-    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), (SELECT id FROM city_ids WHERE name = 'Tokyo'), '2024-04-10', '2024-04-20', 1, 3500.00, 'Complete Japan experience'),
-    ((SELECT id FROM trip_ids WHERE title = 'Australian Road Trip'), (SELECT id FROM city_ids WHERE name = 'Sydney'), '2024-09-05', '2024-09-20', 1, 4000.00, 'Base for exploring Australia')
+    ((SELECT id FROM trip_ids WHERE title = 'European Adventure 2024'), (SELECT id FROM city_ids WHERE name = 'Paris'), DATE '2024-06-15', DATE '2024-06-20', 1, 1500.00, 'Visit major landmarks and museums'),
+    ((SELECT id FROM trip_ids WHERE title = 'European Adventure 2024'), (SELECT id FROM city_ids WHERE name = 'Berlin'), DATE '2024-06-21', DATE '2024-06-25', 2, 1200.00, 'Explore historical sites'),
+    ((SELECT id FROM trip_ids WHERE title = 'European Adventure 2024'), (SELECT id FROM city_ids WHERE name = 'London'), DATE '2024-06-26', DATE '2024-06-30', 3, 2000.00, 'Final stop - shopping and theater'),
+    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), (SELECT id FROM city_ids WHERE name = 'Tokyo'), DATE '2024-04-10', DATE '2024-04-20', 1, 3500.00, 'Complete Japan experience'),
+    ((SELECT id FROM trip_ids WHERE title = 'Australian Road Trip'), (SELECT id FROM city_ids WHERE name = 'Sydney'), DATE '2024-09-05', DATE '2024-09-20', 1, 4000.00, 'Base for exploring Australia')
 ) AS v(trip_id, city_id, arrival_date, departure_date, order_index, budget_allocated, notes);
 
 -- =====================================================
@@ -109,11 +109,11 @@ WITH trip_ids AS (
 )
 INSERT INTO expenses (trip_id, category, amount, currency, description, expense_date)
 SELECT * FROM (VALUES
-    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), 'accommodation', 150.00, 'USD', 'Hotel in Shibuya', '2024-04-10'),
-    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), 'food', 45.00, 'USD', 'Sushi dinner', '2024-04-10'),
-    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), 'transport', 25.00, 'USD', 'JR Pass day ticket', '2024-04-11'),
-    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), 'attractions', 12.00, 'USD', 'Tokyo Tower admission', '2024-04-11'),
-    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), 'shopping', 80.00, 'USD', 'Souvenirs from Harajuku', '2024-04-12')
+    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), 'accommodation'::expense_category, 150.00, 'USD', 'Hotel in Shibuya', DATE '2024-04-10'),
+    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), 'food'::expense_category, 45.00, 'USD', 'Sushi dinner', DATE '2024-04-10'),
+    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), 'transport'::expense_category, 25.00, 'USD', 'JR Pass day ticket', DATE '2024-04-11'),
+    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), 'attractions'::expense_category, 12.00, 'USD', 'Tokyo Tower admission', DATE '2024-04-11'),
+    ((SELECT id FROM trip_ids WHERE title = 'Japan Discovery Tour'), 'shopping'::expense_category, 80.00, 'USD', 'Souvenirs from Harajuku', DATE '2024-04-12')
 ) AS v(trip_id, category, amount, currency, description, expense_date);
 
 -- =====================================================
@@ -127,10 +127,10 @@ WITH user_ids AS (
 )
 INSERT INTO attraction_reviews (attraction_id, user_id, rating, title, content, visit_date)
 SELECT * FROM (VALUES
-    ((SELECT id FROM attraction_ids WHERE name = 'Tokyo Tower'), (SELECT id FROM user_ids WHERE username = 'janesmith'), 4, 'Great views of the city', 'Amazing panoramic views of Tokyo. Best visited during sunset. A bit crowded but worth it!', '2024-04-11'),
-    ((SELECT id FROM attraction_ids WHERE name = 'Eiffel Tower'), (SELECT id FROM user_ids WHERE username = 'johndoe'), 5, 'Iconic and breathtaking', 'Absolutely stunning, especially at night when it lights up. The elevator ride is smooth and the views are incredible.', '2024-06-16'),
-    ((SELECT id FROM attraction_ids WHERE name = 'Sydney Opera House'), (SELECT id FROM user_ids WHERE username = 'priyapatel'), 5, 'Architectural masterpiece', 'Not just beautiful from outside, the interior tours are fascinating. Caught a great performance here too!', '2024-09-10'),
-    ((SELECT id FROM attraction_ids WHERE name = 'Central Park'), (SELECT id FROM user_ids WHERE username = 'alexchen'), 4, 'Perfect for relaxation', 'Great place to escape the city hustle. Loved the boat rides and the zoo. Could spend a whole day here.', '2024-05-15')
+    ((SELECT id FROM attraction_ids WHERE name = 'Tokyo Tower'), (SELECT id FROM user_ids WHERE username = 'janesmith'), 4, 'Great views of the city', 'Amazing panoramic views of Tokyo. Best visited during sunset. A bit crowded but worth it!', DATE '2024-04-11'),
+    ((SELECT id FROM attraction_ids WHERE name = 'Eiffel Tower'), (SELECT id FROM user_ids WHERE username = 'johndoe'), 5, 'Iconic and breathtaking', 'Absolutely stunning, especially at night when it lights up. The elevator ride is smooth and the views are incredible.', DATE '2024-06-16'),
+    ((SELECT id FROM attraction_ids WHERE name = 'Sydney Opera House'), (SELECT id FROM user_ids WHERE username = 'priyapatel'), 5, 'Architectural masterpiece', 'Not just beautiful from outside, the interior tours are fascinating. Caught a great performance here too!', DATE '2024-09-10'),
+    ((SELECT id FROM attraction_ids WHERE name = 'Central Park'), (SELECT id FROM user_ids WHERE username = 'alexchen'), 4, 'Perfect for relaxation', 'Great place to escape the city hustle. Loved the boat rides and the zoo. Could spend a whole day here.', DATE '2024-05-15')
 ) AS v(attraction_id, user_id, rating, title, content, visit_date);
 
 -- =====================================================
